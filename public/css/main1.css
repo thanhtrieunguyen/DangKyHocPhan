@@ -1,0 +1,11 @@
+
+.hd-logo .logo-txt {
+    font-size: 1.85rem;
+    color: #B3995D;
+    font-weight: 600;
+    line-height: 130%;
+    text-transform: uppercase;
+    -webkit-transition: all .4s;
+    transition: all .4s;
+    font-family: 'Montserrat', serif !important;
+}
