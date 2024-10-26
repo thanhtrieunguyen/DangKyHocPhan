@@ -9,7 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SinhVienController;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 
-Route::middleware(['checkLoginCookie'])->group(function () {
+Route::middleware([\App\Http\Middleware\CheckLoginCookie::class])->group(function () {
     Route::get('/trangchu', [HomeController::class, 'getHome'])->name('trangchu');
 
     Route::get('/dangky', [DangKyController::class, 'index'])->name('dangky');
