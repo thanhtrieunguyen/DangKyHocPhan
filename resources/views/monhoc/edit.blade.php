@@ -177,13 +177,13 @@
             scheduleContainer.addEventListener('change', updateLichhocJson);
 
             // Khởi tạo lịch học hiện tại
-            const currentSchedule = @json(isset($parsedSchedule) ? $parsedSchedule : []);
+            const currentSchedule = @json($parsedSchedule);
             if (currentSchedule.length > 0) {
                 currentSchedule.forEach(schedule => {
                     addScheduleRow(schedule.day, schedule.start_time, schedule.end_time);
                 });
             } else if (!noScheduleCheckbox.checked) {
-                addScheduleRow(); // Thêm một hàng trống nếu không có lịch học và không chọn "Không có lịch học"
+                addScheduleRow(); // Thêm một hàng trống nếu không có lịch học
             }
         });
     </script>

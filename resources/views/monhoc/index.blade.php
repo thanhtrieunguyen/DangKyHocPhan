@@ -52,6 +52,21 @@
                 class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md shadow-md">Thêm Môn
                 học</a>
         </div>
+
+        <form method="GET" action="{{ route('monhoc.index') }}" class="mt-4">
+            <div class="flex items-center">
+                <label for="makhoa" class="mr-2 text-white">Chọn Khoa:</label>
+                <select name="makhoa" id="makhoa" class="form-select">
+                    <option value="">Tất cả</option>
+                    @foreach ($khoas as $khoa)
+                        <option value="{{ $khoa->makhoa }}" {{ request('makhoa') == $khoa->makhoa ? 'selected' : '' }}>
+                            {{ $khoa->tenkhoa }}
+                        </option>
+                    @endforeach
+                </select>
+                <button type="submit" class="ml-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">Lọc</button>
+            </div>
+        </form>
     </div>
 
     <!-- Table Section -->
@@ -93,13 +108,20 @@
                             <a class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg transition-all duration-200"
                                 href="{{ route('monhoc.edit', $monhoc->mamonhoc) }}">Sửa</a>
                         </td>
-                        <td class="px-4 py-2">
+
+                        {{-- <td class="px-4 py-2">
                             <form action="{{ route('monhoc.destroy', $monhoc->mamonhoc) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
                                     class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg transition-all duration-200">Xóa</button>
                             </form>
+                        </td> --}}
+
+                        <td class="px-4 py-2">
+                            <button type="button"
+                                class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg transition-all duration-200"
+                                onclick="confirmDelete('{{ route('monhoc.destroy', $monhoc->mamonhoc) }}')">Xóa</button>
                         </td>
                     </tr>
                 @endforeach
@@ -126,8 +148,50 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="my-4 -mt-4">
+                {{ $monhocs->links() }}
+            </div>
+            
         </div>
     </div>
+
+    <script>
+        function confirmDelete(url) {
+            Swal.fire({
+                title: 'Bạn có chắc chắn?',
+                text: "Hành động này sẽ xóa môn học!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Có, xóa nó!',
+                cancelButtonText: 'Không, hủy bỏ!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Nếu xác nhận, gửi yêu cầu xóa
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = url;
+    
+                    const csrfToken = document.createElement('input');
+                    csrfToken.type = 'hidden';
+                    csrfToken.name = '_token';
+                    csrfToken.value = '{{ csrf_token() }}'; // Thay thế với token của bạn
+    
+                    const methodField = document.createElement('input');
+                    methodField.type = 'hidden';
+                    methodField.name = '_method';
+                    methodField.value = 'DELETE';
+    
+                    form.appendChild(csrfToken);
+                    form.appendChild(methodField);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        }
+    </script>
+
     @include('layouts.footer')
 
 </body>

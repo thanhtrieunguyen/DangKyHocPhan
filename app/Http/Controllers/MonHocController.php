@@ -13,10 +13,21 @@ use Illuminate\Support\Facades\DB;
 class MonHocController extends Controller
 {
     // Hiển thị danh sách môn học
-    public function index()
+    public function index(Request $request)
     {
-        $monhocs = MonHoc::all();
-        return view('monhoc.index', compact('monhocs'));
+        $query = MonHoc::query();
+
+        // Lấy danh sách khoa để hiển thị trong select
+        $khoas = Khoa::all(); // Giả sử bạn có model Khoa
+
+        // Kiểm tra nếu có filter theo khoa
+        if ($request->has('makhoa') && $request->makhoa != '') {
+            $query->where('makhoa', $request->makhoa);
+        }
+
+        $monhocs = $query->orderBy('created_at', 'desc')->paginate(10); // Sắp xếp và phân trang
+
+        return view('monhoc.index', compact('monhocs', 'khoas'));
     }
 
     // Chuyển đến form thêm mới môn học
@@ -87,16 +98,15 @@ class MonHocController extends Controller
         $monhoc = MonHoc::find($mamonhoc);
         $khoas = Khoa::all();
 
-        // Parse the formatted lichhoc string into an array
-        $lichhocData = $monhoc->lichhoc ? json_decode($monhoc->lichhoc, true) : [];
-
-        // Prepare the parsed schedule for the view
         $parsedSchedule = [];
-        if ($lichhocData) {
-            foreach ($lichhocData as $item) {
-                // Example format: "Thứ 2, 14h00-16h00"
-                preg_match('/^(.*?), (\d{1,2}h\d{2})-(\d{1,2}h\d{2})$/', $item, $matches);
-                if ($matches) {
+        if ($monhoc->lichhoc) {
+            $schedules = explode(';', $monhoc->lichhoc);
+            foreach ($schedules as $schedule) {
+                // Trim để loại bỏ khoảng trắng thừa
+                $schedule = trim($schedule);
+
+                // Parse thông tin từ chuỗi "Thứ x, HHhmm-HHhmm"
+                if (preg_match('/^(Thứ \d|Chủ nhật), (\d{2})h(\d{2})-(\d{2})h(\d{2})$/', $schedule, $matches)) {
                     $dayMap = [
                         'Thứ 2' => '2',
                         'Thứ 3' => '3',
@@ -106,21 +116,18 @@ class MonHocController extends Controller
                         'Thứ 7' => '7',
                         'Chủ nhật' => '8'
                     ];
-                    $day = $dayMap[$matches[1]] ?? null;
-                    $startTime = $matches[2];
-                    $endTime = $matches[3];
 
-                    $lichhoc = json_decode($monhoc->lichhoc, true);
-                    $parsedSchedule = [];
-                    if ($lichhoc) {
-                        foreach ($lichhoc as $schedule) {
-                            $parsedSchedule[] = [
-                                'day' => $schedule['day'],
-                                'start_time' => $schedule['start_time'],
-                                'end_time' => $schedule['end_time'],
-                            ];
-                        }
-                    }
+                    $day = $dayMap[$matches[1]] ?? '';
+                    $startHour = $matches[2];
+                    $startMinute = $matches[3];
+                    $endHour = $matches[4];
+                    $endMinute = $matches[5];
+
+                    $parsedSchedule[] = [
+                        'day' => $day,
+                        'start_time' => sprintf('%02d:%02d', $startHour, $startMinute),
+                        'end_time' => sprintf('%02d:%02d', $endHour, $endMinute)
+                    ];
                 }
             }
         }
