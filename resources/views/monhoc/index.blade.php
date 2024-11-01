@@ -73,7 +73,7 @@
     <div class="bg-white rounded-md shadow-md mt-2 p-4">
         <table class="min-w-full table-auto border-collapse border border-gray-200 rounded-md overflow-hidden">
             <thead>
-                <tr class=" text-white text-left" style="background-color: #002244">
+                <tr class="text-white text-left" style="background-color: #002244">
                     <th class="py-3 px-2 text-center">STT</th>
                     <th class="py-3 px-4">Mã môn học</th>
                     <th class="py-3 px-4">Tên môn học</th>

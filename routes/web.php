@@ -20,7 +20,7 @@ Route::middleware([\App\Http\Middleware\CheckLoginCookie::class])->group(functio
     Route::post('/dangky/find', [DangKyController::class, 'search'])->name('dangky.search');
 
     Route::get('/ketqua-dangky', [DangKyController::class, 'ketQuaDangKy'])->name('ketquadangky');
-    Route::get('/delete-dangky/{mamonhoc}', [DangKyController::class, 'deleteDangKy'])->name('delete_dangky');
+    Route::delete('/delete-dangky/{mamonhoc}', [DangKyController::class, 'deleteDangKy'])->name('delete_dangky');
 
     Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile');
     Route::get('/profile/{mssv}/edit', [ProfileController::class, 'editProfile'])->name('profile.edit');

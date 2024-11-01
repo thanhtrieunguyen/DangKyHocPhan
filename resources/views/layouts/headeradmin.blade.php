@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -56,7 +56,7 @@
     <link rel="stylesheet" href="{{ asset('css/main1.css') }}">
 </head>
 
-<body>
+<body> --}}
     <div>
         <div class="hd-logo"
             style="
@@ -83,7 +83,7 @@
             <a href="/quanly-sinhvien">Quản lý sinh viên</a> |
             <a href="/quanly-monhoc">Quản lý môn học</a> |
             <a href="#">Admin</a> -
-            <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+            <form action="{{ route('logout') }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn đăng xuất không?');">
                 @csrf
                 <button type="submit"
                     style="background: none; font-size: 16.5px; border: none; color: white; cursor: pointer;">Đăng
@@ -91,7 +91,7 @@
             </form>
         </div>
     </div>
-
+{{-- 
 </body>
 
-</html>
+</html> --}}

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -56,7 +56,7 @@
     <link rel="stylesheet" href="{{ asset('css/main1.css') }}">
 </head>
 
-<body>
+<body> --}}
     <div>
         <div class="hd-logo"
             style="
@@ -83,15 +83,16 @@
             <a href="/dangky">Đăng ký học phần</a> |
             <a href="/ketqua-dangky">Kết quả đăng ký</a> |
             <a href="/profile">{{ $sinhvien->hoten }}</a> -
-            <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+            <form action="{{ route('logout') }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn đăng xuất không?');">
                 @csrf
                 <button type="submit"
                     style="background: none; font-size: 16.5px; border: none; color: white; cursor: pointer;">Đăng
                     Xuất</button>
             </form>
+            
         </div>
     </div>
 
-</body>
+{{-- </body>
 
-</html>
+</html> --}}

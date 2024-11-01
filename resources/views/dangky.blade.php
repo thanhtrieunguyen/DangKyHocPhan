@@ -1,32 +1,8 @@
-<!DOCTYPE html>
-<html>
+@extends('layouts.main')
 
-<head>
-    <title>Đăng ký học phần</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@section('title', 'Đăng ký học phần')
 
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        .spacing {
-            margin: 2px 0;
-        }
-
-        button {
-            text-decoration: none
-        }
-    </style>
-</head>
-
-<body>
-    @include('layouts.header')
-
+@section('content')
     <div class="container mx-auto py-10 px-4">
         <!-- Error Notification -->
         @if (session('error'))
@@ -71,8 +47,8 @@
             <form class="inline-block" action="{{ route('dangky.search') }}" method="post">
                 @csrf
                 <div class="flex items-center space-x-4">
-                    <input class="border border-gray-300 rounded-lg px-3 py-2 focus:ring focus:ring-blue-300"
-                        type="text" name="search" placeholder="Tìm kiếm...">
+                    <input class="border border-gray-300 rounded-lg px-3 py-2 focus:ring focus:ring-blue-300" type="text"
+                        name="search" placeholder="Tìm kiếm...">
                     <input type="submit"
                         class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg cursor-pointer hover:bg-blue-600 transition"
                         value="Tìm kiếm">
@@ -106,11 +82,12 @@
                             <td class="py-2 px-4">{{ $monhoc->lichhoc }}</td>
                             <td class="py-2 px-4">{{ $monhoc->dadangky }} / {{ $monhoc->soluongsinhvien }}</td>
                             <td class="py-2 px-4"
-                                style="background: {{ $monhoc->dadangky < $monhoc->soluongsinhvien ? '#ffddaa' : '#ff0000' }};">
+                                style="background: {{ $monhoc->dadangky < $monhoc->soluongsinhvien ? '' : '#ff0000' }};">
                                 @if ($monhoc->dadangky < $monhoc->soluongsinhvien)
                                     <button
-                                        class="bg-transparent text-black border-none underline cursor-pointer btn-register"
-                                        data-mamonhoc="{{ $monhoc->mamonhoc }}" style="text-decoration: none">Đăng ký</button>
+                                        class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg transition-all duration-200 cursor-pointer btn-register"
+                                        data-mamonhoc="{{ $monhoc->mamonhoc }}" style="text-decoration: none">Đăng
+                                        ký</button>
                                 @else
                                     Hết chỗ
                                 @endif
@@ -159,8 +136,4 @@
         </script>
 
     </div>
-    @include('layouts.footer')
-</body>
-
-
-</html>
+@endsection
