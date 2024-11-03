@@ -170,7 +170,6 @@ class MonHocController extends Controller
     }
 
     // Xóa môn học
-    // Xóa môn học
     public function destroy($mamonhoc)
     {
         $monhoc = MonHoc::find($mamonhoc);

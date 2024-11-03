@@ -14,6 +14,10 @@ class Khoa extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
+    protected $fillable = [
+        'tenkhoa',
+        'makhoa',
+    ];
     // Liên kết với bảng LopHoc
     public function lops()
     {

@@ -13,7 +13,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@sweetalert2@10"></script>
     
     <link rel="stylesheet" href="{{ asset('css/main1.css') }}">
@@ -83,7 +82,7 @@
     </header>
 
     <!-- Phần nội dung thay đổi -->
-    <main style="min-height: 800px;">
+    <main style="min-height: 680px;">
         @yield('content')
     </main>
 

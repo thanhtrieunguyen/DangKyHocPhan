@@ -7,6 +7,8 @@ use App\Http\Controllers\DangKyController;
 use App\Http\Controllers\MonHocController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SinhVienController;
+use App\Http\Controllers\KhoaController;
+use App\Http\Controllers\LopController;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 
 Route::middleware([\App\Http\Middleware\CheckLoginCookie::class])->group(function () {
@@ -25,8 +27,6 @@ Route::middleware([\App\Http\Middleware\CheckLoginCookie::class])->group(functio
     Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile');
     Route::get('/profile/{mssv}/edit', [ProfileController::class, 'editProfile'])->name('profile.edit');
     Route::post('/profile/{mssv}/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
-
-
 });
 
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
@@ -38,7 +38,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/admin', [HomeController::class, 'getAdminHome'])->name('admin.home');
 
-//sinh vien
+// Quản lý sinh vien
 Route::get('/quanly-sinhvien', [SinhVienController::class, 'index'])->name('sinhvien.index');
 Route::get('quanly-sinhvien/create', [SinhVienController::class, 'create'])->name('sinhvien.create');
 Route::post('quanly-sinhvien', [SinhVienController::class, 'store'])->name('sinhvien.store');
@@ -48,6 +48,7 @@ Route::delete('quanly-sinhvien/{id}', [SinhVienController::class, 'destroy'])->n
 
 Route::get('/getLops/{makhoa}', [SinhVienController::class, 'getLops'])->name('getLops');
 
+// Quản lý môn học
 Route::get('/quanly-monhoc', [MonHocController::class, 'index'])->name('monhoc.index');
 Route::get('quanly-monhoc/create', [MonHocController::class, 'create'])->name('monhoc.create');
 Route::post('quanly-monhoc', [MonHocController::class, 'store'])->name('monhoc.store');
@@ -60,3 +61,23 @@ Route::delete('monhoc/{mamonhoc}/sinhvien/{dangKyId}', [MonHocController::class,
 
 // Transaction concurrency
 Route::post('quanly-sinhvien/{mssv}/update', [ProfileController::class, 'updateWithTransaction'])->name('transaction.update');
+
+
+// Quản lý khoa
+Route::get('/quanly-khoa', [KhoaController::class, 'index'])->name('khoa.index');
+Route::get('quanly-khoa/create', [KhoaController::class, 'create'])->name('khoa.create');
+Route::post('quanly-khoa', [KhoaController::class, 'store'])->name('khoa.store');
+Route::get('quanly-khoa/{id}/edit', [KhoaController::class, 'edit'])->name('khoa.edit');
+Route::put('quanly-khoa/{id}', [KhoaController::class, 'update'])->name('khoa.update');
+Route::delete('quanly-khoa/{id}', [KhoaController::class, 'destroy'])->name('khoa.destroy');
+Route::get('khoa/{makhoa}/lophoc', [KhoaController::class, 'showLopHoc'])->name('khoa.lophocs');
+Route::delete('khoa/{makhoa}/lophoc/{malop}', [KhoaController::class, 'deleteLopHoc'])->name('khoa.deleteLopHoc');
+
+
+// Quản lý lớp học
+Route::get('/quanly-lop', [LopController::class, 'index'])->name('lophoc.index');
+Route::get('quanly-lop/create', [LopController::class, 'create'])->name('lophoc.create');
+Route::post('quanly-lop', [LopController::class, 'store'])->name('lophoc.store');
+Route::get('quanly-lop/{id}/edit', [LopController::class, 'edit'])->name('lophoc.edit');
+Route::put('quanly-lop/{id}', [LopController::class, 'update'])->name('lophoc.update');
+Route::delete('quanly-lop/{id}', [LopController::class, 'destroy'])->name('lophoc.destroy');
