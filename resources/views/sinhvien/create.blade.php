@@ -1,21 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.main-admin')
+@section('title', 'Thêm sinh viên')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm Sinh Viên Mới</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <style>
-        body {
-            padding-bottom: 100px
-        }
-    </style>
-</head>
-
-<body>
-    @include('layouts.headeradmin');
+@section('content')
     <div class="container mx-auto mt-10">
         <div class="flex justify-center">
             <div class="w-full max-w-lg">
@@ -108,7 +94,6 @@
             </div>
         </div>
     </div>
-
     <script>
         // Sử dụng Ajax để lấy danh sách lớp khi chọn khoa
         $('#makhoa').on('change', function() {
@@ -133,9 +118,4 @@
             }
         });
     </script>
-
-    @include('layouts.footer')
-
-</body>
-
-</html>
+@endsection
