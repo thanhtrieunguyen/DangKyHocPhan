@@ -50,6 +50,7 @@
                         <th class="py-3 px-4">Mã lớp</th>
                         <th class="py-3 px-4">Tên lớp</th>
                         <th class="py-3 px-4">Khoa</th>
+                        <th class="py-3 px-4">Số lượng sinh viên</th>
                         <th class="py-3 px-4 text-center">Sửa</th>
                         <th class="py-3 px-4 text-center">Xóa</th>
                     </tr>
@@ -61,6 +62,12 @@
                             <td class="py-2 px-4">{{ $lop->malop }}</td>
                             <td class="py-2 px-4">{{ $lop->tenlop }}</td>
                             <td class="py-2 px-4">{{ $lop->khoa->tenkhoa }}</td>
+                            <td class="py-2 px-4 text-center">
+                                <a href="{{ route('lop.sinhviens', $lop->malop) }}"
+                                    class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg transition-all duration-200">
+                                    {{ $lop->sinhviens_count }}
+                                </a>
+                            </td>
                             <td class="px-4 py-2 text-center">
                                 <a class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg transition-all duration-200"
                                     href="{{ route('lophoc.edit', $lop->malop) }}">Sửa</a>

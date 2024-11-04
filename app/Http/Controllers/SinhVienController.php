@@ -11,7 +11,8 @@ class SinhVienController extends Controller
 {
     public function index()
     {
-        $sinhviens = SinhVien::all();
+        $query = SinhVien::query();
+        $sinhviens = $query->orderBy('created_at', 'desc')->paginate(10);
         return view('sinhvien.index', compact('sinhviens'));
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Khoa;
 use Illuminate\Http\Request;
 use App\Models\LopHoc;
+use App\Models\SinhVien;
 use Illuminate\Support\Facades\DB;
 
 
@@ -12,7 +13,7 @@ class LopController extends Controller
 {
     public function index()
     {
-        $query = LopHoc::query();
+        $query = LopHoc::query()->withCount('sinhviens');
         $khoas = Khoa::all();
         $lops = $query->orderBy('created_at', 'desc')->paginate(10);
         return view('lophoc.index', compact('lops', 'khoas'));
@@ -83,5 +84,35 @@ class LopController extends Controller
     {
         $lops = LopHoc::where('makhoa', $makhoa)->get(); // Lấy danh sách lớp theo khoa
         return response()->json($lops);
+    }
+
+    public function showSinhVien($malop)
+    {
+        $lop = LopHoc::with('sinhviens')->where('malop', $malop)->first();
+
+        if (!$lop) {
+            return redirect()->route('lophoc.index')->with('error', 'Lớp học không tồn tại.');
+        }
+
+        return view('lophoc.sinhvien', compact('lop'));
+    }
+
+    public function deleteSinhVien($malop, $mssv)
+    {
+        $lop = LopHoc::find($malop);
+
+        if (!$lop) {
+            return redirect()->back()->with('error', 'Lớp học không tồn tại.');
+        }
+
+        $sinhvien = $lop->sinhviens()->where('mssv', $mssv)->first();
+
+        if (!$sinhvien) {
+            return redirect()->back()->with('error', 'Sinh viên không tồn tại trong lớp học.');
+        }
+
+        $sinhvien->delete();
+
+        return redirect()->route('lop.sinhviens', $malop)->with('success', 'Xoá sinh viên khỏi lớp học thành công.');
     }
 }
