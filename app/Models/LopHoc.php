@@ -19,7 +19,7 @@ class LopHoc extends Model
         return $this->belongsTo(Khoa::class, 'makhoa', 'makhoa');
     }
 
-    public function dsdangky()
+    public function sinhviens()
     {
         return $this->hasMany(SinhVien::class, 'malop', 'malop');
     }

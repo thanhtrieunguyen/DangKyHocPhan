@@ -81,3 +81,5 @@ Route::post('quanly-lop', [LopController::class, 'store'])->name('lophoc.store')
 Route::get('quanly-lop/{id}/edit', [LopController::class, 'edit'])->name('lophoc.edit');
 Route::put('quanly-lop/{id}', [LopController::class, 'update'])->name('lophoc.update');
 Route::delete('quanly-lop/{id}', [LopController::class, 'destroy'])->name('lophoc.destroy');
+Route::get('lop/{malop}/sinhvien', [LopController::class, 'showSinhVien'])->name('lop.sinhviens');
+Route::delete('lop/{malop}/sinhvien/{masinhvien}', [LopController::class, 'deleteSinhVien'])->name('lop.deleteSinhVien');
