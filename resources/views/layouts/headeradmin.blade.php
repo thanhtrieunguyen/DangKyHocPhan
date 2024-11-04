@@ -23,6 +23,8 @@
             <a href="/admin">Trang Chủ</a> |
             <a href="/quanly-sinhvien">Quản lý sinh viên</a> |
             <a href="/quanly-monhoc">Quản lý môn học</a> |
+            <a href="/quanly-khoa">Quản lý khoa</a> |
+            <a href="/quanly-lop">Quản lý lớp</a> |
             <a href="#">Admin</a> -
             <form action="{{ route('logout') }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn đăng xuất không?');">
                 @csrf
