@@ -30,16 +30,13 @@
     }
 </style>
 <div class="container mx-auto py-12">
-    <!-- Title -->
-    <div class="text-center text-2xl font-bold text-black mb-6">
-        KẾT QUẢ ĐĂNG KÝ HỌC PHẦN
-    </div>
-
-    <!-- Student Info -->
-    <div class="text-center mb-6">
+    
+    <!-- Title and Student Info -->
+    <div class="text-center mb-8 grid grid-cols-3 gap-4 items-center">
+        <h1 class="text-3xl font-semibold col-span-3">KẾT QUẢ ĐĂNG KÝ HỌC PHẦN</h1>
         <p class="text-lg">Họ tên: <strong>{{ $sinhvien->hoten }}</strong></p>
-        <p class="text-lg">Mã Sinh Viên: <strong>{{ $sinhvien->mssv }}</strong> - Lớp:
-            <strong>{{ $sinhvien->lop->tenlop }}</strong></p>
+        <p class="text-lg">Mã Sinh Viên: <strong>{{ $sinhvien->mssv }}</strong></p>
+        <p class="text-lg">Lớp: <strong>{{ $sinhvien->lop->tenlop }}</strong></p>
     </div>
 
     <!-- Course Registration List Title -->

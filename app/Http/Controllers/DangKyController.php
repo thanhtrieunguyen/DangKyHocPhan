@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DSDangKy;
 use App\Models\SinhVien;
+use App\Models\HocKy;
 use App\Models\MonHoc;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,35 +13,121 @@ use Illuminate\Support\Facades\Auth;
 
 class DangKyController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $sinhvien = Auth::user();
+        $currentDate = now();
 
+        // lấy học kỳ hiện tại của sinh viên (trạng thái "đang học")
+        $currentSemester = DB::table('hocky_sinhvien')
+            ->join('hocky', 'hocky_sinhvien.mahocky', '=', 'hocky.mahocky')
+            ->where('hocky_sinhvien.mssv', $sinhvien->mssv)
+            ->where('hocky_sinhvien.trangthai_hocky_sinhvien', 'đang học')
+            ->orderBy('hocky.ngaybatdau', 'desc')
+            ->first();
+
+        // níu sinh viên chưa có học kỳ nào, lấy học kỳ gần nhất có trạng thái true
+        if (!$currentSemester) {
+            $currentSemester = HocKy::where('trangthai', true)
+                ->where('ngaybatdau', '<=', $currentDate)
+                ->orderBy('ngaybatdau', 'desc')
+                ->first();
+        }
+
+        if (!$currentSemester) {
+            return back()->with('error', 'Hiện tại không có học kỳ nào đang mở đăng ký');
+        }
+
+        // lấy danh sách học kỳ từ học kỳ hiện tại trở đi
+        $hockyList = HocKy::where('trangthai', true)
+            ->where('ngaybatdau', '>=', $currentSemester->ngaybatdau)
+            ->orderBy('ngaybatdau', 'desc')
+            ->get();
+
+        $selectedType = request('study_type', 'new');
+        $selectedHocKy = request('hocky', $currentSemester->mahocky);
+
+        // kiểm tra xem học kỳ được chọn có ok ko
+        $selectedSemester = $hockyList->firstWhere('mahocky', $selectedHocKy);
+
+        if ($selectedSemester && $selectedSemester->ngaybatdau > $currentDate) {
+            return back()->with('error', 'Học kỳ này chưa mở đăng ký');
+        }
+
+        // lấy danh sách môn học đã đăng ký để loại trừ mấy môn đó không cho đăng ký nữa
         $monHocDaDangKy = $sinhvien->dsdangky->pluck('mamonhoc')->toArray();
+
+        // lấy danh sách môn học có thể đăng ký
         $monHocList = MonHoc::where('makhoa', $sinhvien->makhoa)
+            ->where('mahocky', $selectedHocKy)
+            ->where('trangthai', true)
             ->whereNotIn('mamonhoc', $monHocDaDangKy)
             ->get();
 
-        return view('dangky', compact('sinhvien', 'monHocList'));
+        return view('dangky', compact(
+            'sinhvien',
+            'hockyList',
+            'selectedHocKy',
+            'monHocList',
+            'selectedType',
+            'currentSemester'
+        ));
     }
 
     public function search(Request $request)
     {
-        $searchTerm = $request->input('search');
         $sinhvien = Auth::user();
-        $mssv = $sinhvien->mssv;
+        $currentDate = now();
+        $searchTerm = $request->input('search');
 
-        // Tìm kiếm môn học theo từ khóa
-        $monHocList = DB::table('sinhvien')
-            ->join('lophoc', 'sinhvien.malop', '=', 'lophoc.malop')
-            ->join('khoa', 'lophoc.makhoa', '=', 'khoa.makhoa')
-            ->join('monhoc', 'khoa.makhoa', '=', 'monhoc.makhoa')
-            ->where('sinhvien.mssv', $mssv)
-            ->where('monhoc.tenmonhoc', 'LIKE', "%{$searchTerm}%")
-            ->select('monhoc.*')
+        $currentSemester = DB::table('hocky_sinhvien')
+            ->join('hocky', 'hocky_sinhvien.mahocky', '=', 'hocky.mahocky')
+            ->where('hocky_sinhvien.mssv', $sinhvien->mssv)
+            ->where('hocky_sinhvien.trangthai_hocky_sinhvien', 'đang học')
+            ->orderBy('hocky.ngaybatdau', 'desc')
+            ->first();
+
+        if (!$currentSemester) {
+            $currentSemester = HocKy::where('trangthai', true)
+                ->where('ngaybatdau', '<=', $currentDate)
+                ->orderBy('ngaybatdau', 'desc')
+                ->first();
+        }
+
+        $hockyList = HocKy::where('trangthai', true)
+            ->where('ngaybatdau', '>=', $currentSemester->ngaybatdau)
+            ->orderBy('ngaybatdau', 'desc')
             ->get();
 
-        return view('dangky', compact('sinhvien', 'monHocList'));
+        $selectedType = request('study_type', 'new');
+        $selectedHocKy = request('hocky', $currentSemester->mahocky);
+
+        $monHocDaDangKy = $sinhvien->dsdangky->pluck('mamonhoc')->toArray();
+
+        $monHocList = MonHoc::where('makhoa', $sinhvien->makhoa)
+            ->where('mahocky', $selectedHocKy)
+            ->where('trangthai', true)
+            ->whereNotIn('mamonhoc', $monHocDaDangKy)
+            ->where(function ($query) use ($searchTerm) {
+                $query->where('mamonhoc', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('tenmonhoc', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('giangvien', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('lichhoc', 'like', '%' . $searchTerm . '%');
+            })
+            ->get();
+
+        if ($monHocList->isEmpty()) {
+            return back()->with('error', 'Không tìm thấy môn học phù hợp với từ khóa "' . $searchTerm . '"');
+        }
+
+        return view('dangky', compact(
+            'sinhvien',
+            'hockyList',
+            'selectedHocKy',
+            'monHocList',
+            'selectedType',
+            'currentSemester'
+        ))->with('success', 'Đã tìm thấy ' . $monHocList->count() . ' môn học phù hợp');
     }
 
     public function addMonHoc(Request $request)
@@ -50,21 +137,18 @@ class DangKyController extends Controller
 
         // Sử dụng transaction để đảm bảo tính toàn vẹn dữ liệu
         DB::transaction(function () use ($sinhvien, $mamonhoc) {
-            // Lock hàng tương ứng trong bảng 'monhoc' để đảm bảo không có sinh viên khác đăng ký cùng lúc
+
             $monhoc = MonHoc::where('mamonhoc', $mamonhoc)->lockForUpdate()->first();
 
-            // Kiểm tra số lượng đã đăng ký
             if ($monhoc && $monhoc->dadangky < $monhoc->soluongsinhvien) {
-                // Thêm môn học vào bảng đăng ký
                 DB::table('dsdangky')->insert([
                     'mamonhoc' => $mamonhoc,
-                    'masinhvien' => $sinhvien->mssv,
+                    'mssv' => $sinhvien->mssv,
                     'dstenmonhoc' => $monhoc->tenmonhoc,
                     'dsgiangvien' => $monhoc->giangvien,
                     'dssotinchi' => $monhoc->sotinchi,
                 ]);
 
-                // Cập nhật số lượng đã đăng ký
                 $monhoc->dadangky += 1;
                 $monhoc->save();
 
@@ -94,7 +178,7 @@ class DangKyController extends Controller
         if ($monhoc && $monhoc->dadangky < $monhoc->soluongsinhvien) {
             DB::table('dsdangky')->insert([
                 'mamonhoc' => $mamonhoc,
-                'masinhvien' => $sinhvien->mssv,
+                'mssv' => $sinhvien->mssv,
                 'dstenmonhoc' => $monhoc->tenmonhoc,
                 'dsgiangvien' => $monhoc->giangvien,
                 'dssotinchi' => $monhoc->sotinchi,
@@ -122,7 +206,7 @@ class DangKyController extends Controller
         $hoten = $sinhvien->hoten;
         // Lấy danh sách đăng ký của sinh viên
         $dsDangKy = DSDangKy::with('monHoc')
-            ->where('masinhvien', $mssv)
+            ->where('mssv', $mssv)
             ->get();
 
         return view('ketquadangky', compact('sinhvien', 'dsDangKy', 'hoten'));
@@ -138,9 +222,9 @@ class DangKyController extends Controller
 
         // Kiểm tra nếu môn học tồn tại
         if ($monhoc) {
-            // Xóa học phần từ bảng `dsdangky` với `masinhvien` và `mamonhoc` tương ứng
+            // Xóa học phần từ bảng `dsdangky` với `mssv` và `mamonhoc` tương ứng
             DB::table('dsdangky')->where([
-                ['masinhvien', '=', $mssv],
+                ['mssv', '=', $mssv],
                 ['mamonhoc', '=', $mamonhoc]
             ])->delete();
 

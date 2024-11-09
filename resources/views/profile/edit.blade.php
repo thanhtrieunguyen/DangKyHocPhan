@@ -1,23 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.main')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ asset('css/util.css') }}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+@section('title', 'Chỉnh sửa thông tin sinh viên')
 
-
-
-    <title>Chỉnh sửa thông tin sinh viên</title>
-
-</head>
-
-<body>
-    @include('layouts.header')
-
+@section('content')
     <div class="container mx-auto py-10">
         @if (session('error'))
             <script>
@@ -67,18 +52,18 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="block text-gray-700 font-medium mb-2" for="lop">Lớp:</label>
-                    <select
-                        class="input98 w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring focus:ring-blue-300"
-                        name="lop" id="lop">
-                        @foreach ($lophoc as $class)
-                            <option value="{{ $class->malop }}"
-                                {{ $sinhvien->malop == $class->malop ? 'selected' : '' }}>
-                                {{ $class->malop }} - Lớp: {{ $class->tenlop }}
+                    <label for="lop" class="block text-gray-700 font-bold mb-2">Lớp:</label> 
+                    <select disabled id="lop" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-not-allowed">
+                        @foreach ($lops as $lop)
+                            <option value="{{ $lop->malop }}" {{ $sinhvien->malop == $lop->malop ? 'selected' : '' }}>
+                                {{ $lop->tenlop }} - Khoa: {{ $lop->tenkhoa }}
                             </option>
                         @endforeach
                     </select>
+                    <!-- Trường input hidden để gửi giá trị lớp đã chọn -->
+                    <input type="hidden" name="lop" value="{{ $sinhvien->malop }}">
                 </div>
+                
 
                 <div class="mb-4">
                     <label class="block text-gray-700 font-medium mb-2" for="quequan">Quê quán:</label>
@@ -95,9 +80,4 @@
             </form>
         </div>
     </div>
-
-    @include('layouts.footer')
-</body>
-
-
-</html>
+@endsection
