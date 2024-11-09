@@ -22,13 +22,13 @@ class ProfileController extends Controller
     public function editProfile($mssv)
     {
         $sinhvien = SinhVien::where('mssv', $mssv)->firstOrFail();
-        $lophoc = DB::table('lophoc')
+        $lops = DB::table('lophoc')
             ->join('khoa', 'lophoc.makhoa', '=', 'khoa.makhoa')
             ->join('sinhvien', 'lophoc.malop', '=', 'sinhvien.malop')
             ->select('lophoc.malop', 'tenlop', 'tenkhoa', 'khoa.makhoa')
             ->get();
-
-        return view('profile.edit', compact('sinhvien', 'lophoc'));
+            
+        return view('profile.edit', compact('sinhvien', 'lops'));
     }
 
     // public function updateProfile(Request $request, $mssv)
