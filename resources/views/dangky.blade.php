@@ -131,7 +131,8 @@
                             <th class="py-2 px-4">Đăng Ký</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    
+                    <tbody class="bg-gray-50">
                         @foreach ($monHocList as $index => $monhoc)
                             <tr class="border-b border-gray-200 hover:bg-yellow-100 transition-all duration-200">
                                 <td class="py-2 px-2 text-center">{{ $index + 1 }}</td>

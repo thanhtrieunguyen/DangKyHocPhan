@@ -65,7 +65,7 @@ class AuthController extends Controller
         $hocky_sinhvien = new HocKy_SinhVien();
         $hocky_sinhvien->mssv = $request->mssv;
         $hocky_sinhvien->mahocky = "HK1-2024";
-        $hocky_sinhvien->trangthai_hocky_sinhvien = "Đang học";
+        $hocky_sinhvien->trangthai_hocky_sinhvien = 1; // 0: Đã hoàn thành, 1: Đang học, 2: Bảo lưu
         $hocky_sinhvien->save();
 
         return redirect()->route('login')->with('success', 'Đăng ký thành công! Vui lòng đăng nhập.'); // Thông báo thành công

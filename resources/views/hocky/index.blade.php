@@ -1,6 +1,6 @@
 @extends('layouts.main-admin')
 
-@section('title', 'Danh sách khoa')
+@section('title', 'Danh sách học kỳ')
 @section('content')
     <!-- Success Notification -->
     @if (session('success'))
@@ -32,48 +32,51 @@
         }
     </style>
 
-    <div class="container mx-auto p-4">
+    <div class="container min-w-full mx-auto p-4">
 
         <!-- Header section with title and button -->
         <div class="flex justify-between items-center  text-white p-4 rounded-md shadow-md" style="background-color: #002244">
-            <h2 class="text-2xl font-semibold">Danh Sách Khoa</h2>
-            <a href="{{ route('khoa.create') }}"
-                class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md shadow-md">Thêm mới Khoa</a>
+            <h2 class="text-2xl font-semibold">Danh Sách Học Kỳ</h2>
+            <a href="{{ route('hocky.create') }}"
+                class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md shadow-md">Thêm mới Học
+                kỳ</a>
         </div>
 
         <!-- Table Section -->
         <div class="bg-white rounded-md shadow-md mt-2 p-4">
             <table class="min-w-full table-auto border-collapse border border-gray-200 rounded-md overflow-hidden">
                 <thead>
-                    <tr class="text-white text-left" style="background-color: #002244">
-                        <th class="py-3 px-2 text-center">STT</th>
-                        <th class="py-3 px-4">Mã khoa</th>
-                        <th class="py-3 px-4">Tên khoa</th>
-                        <th class="py-3 px-4 text-center">Số lớp</th>
-                        <th class="py-3 px-4 text-center">Sửa</th>
-                        <th class="py-3 px-4 text-center">Xóa</th>
+                    <tr class="text-white text-center" style="background-color: #002244">
+                        <th class="py-3 px-2">STT</th>
+                        <th class="py-3 px-4">Mã Học kỳ</th>
+                        <th class="py-3 px-4">Tên Học kỳ</th>
+                        <th class="py-3 px-4">Năm học</th>
+                        <th class="py-3 px-4">Ngày bắt đầu</th>
+                        <th class="py-3 px-4">Ngày kết thúc</th>
+                        <th class="py-3 px-4">Trạng thái</th>
+                        <th class="py-3 px-4">Sửa</th>
+                        <th class="py-3 px-4">Xóa</th>
                     </tr>
                 </thead>
                 <tbody class="bg-gray-50">
-                    @foreach ($khoas as $index => $khoa)
-                        <tr class="border-b border-gray-200 hover:bg-yellow-100 transition-all duration-200">
-                            <td class="py-2 px-4 text-center">{{ $index + 1 }}</td>
-                            <td class="py-2 px-4 text-center">{{ $khoa->makhoa }}</td>
-                            <td class="py-2 px-4">{{ $khoa->tenkhoa }}</td>
-                            <td class="py-2 px-4 text-center">
-                                <a href="{{ route('khoa.lophocs', $khoa->makhoa) }}"
-                                    class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg transition-all duration-200">
-                                    {{ $khoa->lops_count }}
-                                </a>
-                            </td>
+                    @foreach ($hockys as $index => $hocky)
+                        <tr class="border-b text-center border-gray-200 hover:bg-yellow-100 transition-all duration-200">
+                            <td class="py-2 px-4">{{ $index + 1 }}</td>
+                            <td class="py-2 px-4">{{ $hocky->mahocky }}</td>
+                            <td class="py-2 px-4">{{ $hocky->tenhocky }}</td>
+                            <td class="py-2 px-4">{{ $hocky->namhoc }}</td>
+                            <td class="py-2 px-4">{{ \Carbon\Carbon::parse($hocky->ngaybatdau)->format('d-m-Y') }}</td>
+                            <td class="py-2 px-4">{{ \Carbon\Carbon::parse($hocky->ngayketthuc)->format('d-m-Y') }}</td>
+
+                            <td class="py-2 px-4">{{ $hocky->trangthai ? 'Đang mở' : 'Đã đóng' }}</td>
                             <td class="px-4 py-2 text-center">
                                 <a class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg transition-all duration-200"
-                                    href="{{ route('khoa.edit', $khoa->makhoa) }}">Sửa</a>
+                                    href="{{ route('hocky.edit', $hocky->mahocky) }}">Sửa</a>
                             </td>
                             <td class="px-4 py-2 text-center">
                                 <button type="button"
                                     class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg transition-all duration-200"
-                                    onclick="confirmDelete('{{ route('khoa.destroy', $khoa->makhoa) }}')">Xóa</button>
+                                    onclick="confirmDelete('{{ route('hocky.destroy', $hocky->mahocky) }}')">Xóa</button>
                             </td>
                         </tr>
                     @endforeach
@@ -91,7 +94,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($khoas as $khoa)
+                        @foreach ($hockys as $hocky)
                             <tr class="bg-orange-100 text-center hover:bg-orange-200 transition-all duration-200">
 
 
@@ -99,9 +102,6 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div class="my-4 -mt-4">
-                    {{ $khoas->links() }}
-                </div>
 
             </div>
         </div>
@@ -111,7 +111,7 @@
         function confirmDelete(url) {
             Swal.fire({
                 title: 'Bạn có chắc chắn?',
-                text: "Hành động này sẽ xóa khoa!",
+                text: "Hành động này sẽ xóa học kỳ!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',

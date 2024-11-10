@@ -10,6 +10,8 @@ class HocKy extends Model
     use HasFactory;
 
     protected $table = 'hocky';
+    protected $primaryKey = 'mahocky';
+
     protected $fillable = [
         'mahocky',
         'tenhocky',

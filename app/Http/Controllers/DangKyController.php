@@ -22,7 +22,7 @@ class DangKyController extends Controller
         $currentSemester = DB::table('hocky_sinhvien')
             ->join('hocky', 'hocky_sinhvien.mahocky', '=', 'hocky.mahocky')
             ->where('hocky_sinhvien.mssv', $sinhvien->mssv)
-            ->where('hocky_sinhvien.trangthai_hocky_sinhvien', 'đang học')
+            ->where('hocky_sinhvien.trangthai_hocky_sinhvien', 1)
             ->orderBy('hocky.ngaybatdau', 'desc')
             ->first();
 
@@ -117,7 +117,7 @@ class DangKyController extends Controller
             ->get();
 
         if ($monHocList->isEmpty()) {
-            return back()->with('error', 'Không tìm thấy môn học phù hợp với từ khóa "' . $searchTerm . '"');
+            return back()->with('error', 'Không tìm thấy môn học phù hợp với từ khóa ' . $searchTerm . '!');
         }
 
         return view('dangky', compact(

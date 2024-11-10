@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DangKyController;
+use App\Http\Controllers\HocKyController;
 use App\Http\Controllers\MonHocController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SinhVienController;
@@ -83,3 +84,11 @@ Route::put('quanly-lop/{id}', [LopController::class, 'update'])->name('lophoc.up
 Route::delete('quanly-lop/{id}', [LopController::class, 'destroy'])->name('lophoc.destroy');
 Route::get('lop/{malop}/sinhvien', [LopController::class, 'showSinhVien'])->name('lop.sinhviens');
 Route::delete('lop/{malop}/sinhvien/{mssv}', [LopController::class, 'deleteSinhVien'])->name('lop.deleteSinhVien');
+
+// Quản lý học kỳ
+Route::get('/quanly-hocky', [HocKyController::class, 'index'])->name('hocky.index');
+Route::get('quanly-hocky/create', [HocKyController::class, 'create'])->name('hocky.create');
+Route::post('quanly-hocky', [HocKyController::class, 'store'])->name('hocky.store');
+Route::get('quanly-hocky/{mahocky}/edit', [HocKyController::class, 'edit'])->name('hocky.edit');
+Route::put('quanly-hocky/{mahocky}', [HocKyController::class, 'update'])->name('hocky.update');
+Route::delete('quanly-hocky/{mahocky}', [HocKyController::class, 'destroy'])->name('hocky.destroy');

@@ -68,6 +68,16 @@
                     </select>
                 </div>
 
+                <div class="mb-4">
+                    <label for="mahocky" class="block text-gray-700">Học kỳ:</label>
+                    <select name="mahocky" id="mahocky" class="form-select mt-1 block border border-gray-300 rounded w-full p-2 focus:outline-none focus:ring focus:ring-blue-300">
+                        <option value="">Chọn học kỳ</option>
+                        @foreach ($hockys as $hocky)
+                            <option value="{{ $hocky->mahocky }}">{{ $hocky->tenhocky }} - Năm học {{ $hocky->namhoc }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-all duration-200">Lưu</button>
             </form>
         </div>
