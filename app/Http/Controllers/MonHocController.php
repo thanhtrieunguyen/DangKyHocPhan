@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DSDangKy;
+use App\Models\HocKy;
 use Illuminate\Http\Request;
 use App\Models\MonHoc;
 use App\Models\Khoa;
@@ -17,24 +18,32 @@ class MonHocController extends Controller
     {
         $query = MonHoc::query();
 
-        // Lấy danh sách khoa để hiển thị trong select
-        $khoas = Khoa::all(); // Giả sử bạn có model Khoa
+        // Lấy danh sách khoa và học kỳ để hiển thị trong select
+        $khoas = Khoa::all();
+        $hockys = HocKy::orderBy('ngaybatdau', 'desc')->get();
 
         // Kiểm tra nếu có filter theo khoa
         if ($request->has('makhoa') && $request->makhoa != '') {
             $query->where('makhoa', $request->makhoa);
         }
 
-        $monhocs = $query->orderBy('created_at', 'desc')->paginate(10); // Sắp xếp và phân trang
+        // Kiểm tra nếu có filter theo học kỳ
+        if ($request->has('hocky') && $request->hocky != '') {
+            $query->where('mahocky', $request->hocky);
+        }
 
-        return view('monhoc.index', compact('monhocs', 'khoas'));
+        // Sắp xếp và phân trang
+        $monhocs = $query->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('monhoc.index', compact('monhocs', 'khoas', 'hockys'));
     }
 
     // Chuyển đến form thêm mới môn học
     public function create()
     {
         $khoas = Khoa::all();
-        return view('monhoc.create', compact('khoas'));
+        $hockys = HocKy::orderBy('ngaybatdau', 'desc')->get();
+        return view('monhoc.create', compact('khoas', 'hockys'));
     }
 
     // Thêm mới môn học
@@ -47,7 +56,8 @@ class MonHocController extends Controller
             'sotinchi' => 'required|integer',
             'soluongsinhvien' => 'required|integer',
             'lichhoc' => 'required|json',
-            'makhoa' => 'required'
+            'makhoa' => 'required',
+            'mahocky' => 'required',
         ]);
 
         $lichhoc = json_decode($validatedData['lichhoc'], true);
@@ -60,6 +70,7 @@ class MonHocController extends Controller
         $monhoc->sotinchi = $validatedData['sotinchi'];
         $monhoc->soluongsinhvien = $validatedData['soluongsinhvien'];
         $monhoc->makhoa = $validatedData['makhoa'];
+        $monhoc->mahocky = $validatedData['mahocky'];
         $monhoc->lichhoc = $formattedLichhoc;
 
         $monhoc->save();
@@ -97,6 +108,7 @@ class MonHocController extends Controller
     {
         $monhoc = MonHoc::find($mamonhoc);
         $khoas = Khoa::all();
+        $hockys = HocKy::orderBy('ngaybatdau', 'desc')->get();
 
         $parsedSchedule = [];
         if ($monhoc->lichhoc) {
@@ -132,7 +144,7 @@ class MonHocController extends Controller
             }
         }
 
-        return view('monhoc.edit', compact('monhoc', 'khoas', 'parsedSchedule'));
+        return view('monhoc.edit', compact('monhoc', 'khoas', 'hockys', 'parsedSchedule'));
     }
 
 
@@ -147,6 +159,7 @@ class MonHocController extends Controller
             'soluongsinhvien' => 'required|integer',
             'lichhoc' => 'nullable|json',
             'makhoa' => 'required',
+            'mahocky' => 'required',
         ]);
 
         $monhoc = MonHoc::findOrFail($mamonhoc);
@@ -156,6 +169,7 @@ class MonHocController extends Controller
         $monhoc->sotinchi = $validatedData['sotinchi'];
         $monhoc->soluongsinhvien = $validatedData['soluongsinhvien'];
         $monhoc->makhoa = $validatedData['makhoa'];
+        $monhoc->mahocky = $validatedData['mahocky'];
 
         if ($request->has('noSchedule') && $request->noSchedule === 'on') {
             $monhoc->lichhoc = null;
