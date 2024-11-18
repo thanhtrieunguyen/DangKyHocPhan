@@ -151,10 +151,11 @@
                                             data-mamonhoc="{{ $monhoc->mamonhoc }}" style="text-decoration: none">Đăng
                                             ký</button>
                                     @else
-                                        <span
-                                            class="text-red-600 font-semibold text-center py-1 px-3 rounded-md bg-red-100 border border-red-500">
-                                            Hết chỗ
-                                        </span>
+                                   
+                                        <button
+                                            class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg transition-all duration-200 cursor-pointer btn-register"
+                                            data-mamonhoc="{{ $monhoc->mamonhoc }}" style="text-decoration: none">Đăng
+                                            ký</button>
                                     @endif
                                 </td>
                             </tr>
