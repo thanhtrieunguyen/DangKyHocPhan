@@ -79,18 +79,18 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->only('username', 'password');
+        $credentials = $request->only('mssv', 'password');
 
-        if ($credentials['username'] === 'admin' && $credentials['password'] === 'admin') {
+        if ($credentials['mssv'] === 'admin' && $credentials['password'] === 'admin') {
             $request->session()->put('isAdmin', true);
             return redirect()->route('admin.home');
         }
 
-        if (empty($credentials['username']) || empty($credentials['password'])) {
+        if (empty($credentials['mssv']) || empty($credentials['password'])) {
             return redirect()->back()->with('error', 'Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu.');
         }
 
-        $user = SinhVien::where('mssv', $credentials['username'])->first();
+        $user = SinhVien::where('mssv', $credentials['mssv'])->first();
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
             return redirect()->back()->with('error', 'Tên đăng nhập hoặc mật khẩu không đúng.');
         }

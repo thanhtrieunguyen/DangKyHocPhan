@@ -123,6 +123,7 @@ class SinhVienController extends Controller
     {
         $sinhvien = SinhVien::findOrFail($mssv);
         $sinhvien->hocky_sinhvien()->delete();
+        $sinhvien->dsdangky()->delete();
         $sinhvien->delete();
         return redirect()->route('sinhvien.index')->with('success', 'Xóa sinh viên thành công');
     }

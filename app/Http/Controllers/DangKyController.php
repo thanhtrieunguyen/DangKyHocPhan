@@ -136,7 +136,7 @@ class DangKyController extends Controller
         $mamonhoc = $request->input('mamonhoc');
 
         // Sử dụng transaction để đảm bảo tính toàn vẹn dữ liệu
-        DB::transaction(function () use ($sinhvien, $mamonhoc) {
+        return DB::transaction(function () use ($sinhvien, $mamonhoc) {
 
             $monhoc = MonHoc::where('mamonhoc', $mamonhoc)->lockForUpdate()->first();
 
@@ -152,16 +152,20 @@ class DangKyController extends Controller
                 $monhoc->dadangky += 1;
                 $monhoc->save();
 
-                // Trả về thông báo thành công
-                return response()->json(['message' => 'Đăng ký học phần thành công!', 'redirect' => route('dangky')], 200);
+                // Trả về thông báo thành công sau khi transaction thành công
+                return response()->json([
+                    'message' => 'Đăng ký học phần thành công!',
+                    'redirect' => route('dangky') // Đảm bảo route đúng
+                ], 200);
             } else {
-                // Thông báo lỗi nếu đã hết chỗ
-                return response()->json(['message' => 'Môn học đã hết chỗ!'], 400);
+                // Nếu môn học đã hết chỗ, trả về thông báo thất bại
+                return response()->json([
+                    'message' => 'Môn học đã hết chỗ!'
+                ], 400);
             }
         });
-
-        return response()->json(['message' => 'Đăng ký thành công!', 'redirect' => route('dangky')], 200);
     }
+
 
 
 

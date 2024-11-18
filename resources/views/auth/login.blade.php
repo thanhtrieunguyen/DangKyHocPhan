@@ -79,10 +79,10 @@
             <form action="/login" method="POST">
                 @csrf
                 <div class="mb-4">
-                    <label class="block text-gray-700 mb-2">Tài khoản:</label>
+                    <label class="block text-gray-700 mb-2">Mã số sinh viên:</label>
                     <input
                         class="input99 border border-gray-300 rounded w-full p-2 focus:outline-none focus:ring focus:ring-blue-300"
-                        type="text" name="username" placeholder="Nhập tài khoản" required>
+                        type="text" name="mssv" id="mssv" placeholder="Nhập Mã số sinh viên" value="{{ old('mssv')}}" required>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2">Mật khẩu:</label>

@@ -11,6 +11,34 @@
             font-size: 18px
         }
     </style>
+
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Có lỗi xảy ra!',
+                text: '{{ session('error') }}',
+                showConfirmButton: true,
+            });
+            <?php session()->forget('error'); ?>
+        </script>
+    @endif
+
+    <!-- Success Notification -->
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+            <?php session()->forget('success'); ?>
+        </script>
+    @endif
+
+
     <div class="container mx-auto py-10">
         <div class="bg-white shadow-xl rounded-lg text-center p-8">
             <img src="https://vaa.edu.vn/wp-content/uploads/2024/05/vaa.svg" class="rounded-full mx-auto mb-5" height="150px"

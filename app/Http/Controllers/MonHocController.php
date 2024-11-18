@@ -33,7 +33,7 @@ class MonHocController extends Controller
         }
 
         // Sắp xếp và phân trang
-        $monhocs = $query->orderBy('created_at', 'desc')->paginate(10);
+        $monhocs = $query->orderBy('created_at', 'desc')->paginate(8);
 
         return view('monhoc.index', compact('monhocs', 'khoas', 'hockys'));
     }
@@ -42,7 +42,7 @@ class MonHocController extends Controller
     public function create()
     {
         $khoas = Khoa::all();
-        $hockys = HocKy::orderBy('ngaybatdau', 'desc')->get();
+        $hockys = DB::table('hocky')->orderBy('namhoc', 'desc')->get();
         return view('monhoc.create', compact('khoas', 'hockys'));
     }
 
