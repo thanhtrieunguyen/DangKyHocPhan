@@ -2,34 +2,19 @@
 
 @section('title', 'Kết quả đăng ký')
 
-
 @section('content')
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        </script>
+    @endif
 
-        td a {
-            text-decoration: none;
-            color: #002244
-        }
-
-        th,
-        td {
-            height: 50px;
-            /* Đặt chiều cao cho các ô */
-            text-align: center;
-            /* Căn giữa nội dung trong ô */
-        }
-
-        tbody td {
-            height: 80px;
-            /* Đặt chiều cao cho các ô */
-            text-align: center;
-            /* Căn giữa nội dung trong ô */
-        }
-    </style>
     @if (session('error'))
         <script>
             Swal.fire({
@@ -38,21 +23,6 @@
                 text: '{{ session('error') }}',
                 showConfirmButton: true,
             });
-            <?php session()->forget('error'); ?>
-        </script>
-    @endif
-
-    <!-- Success Notification -->
-    @if (session('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Thành công!',
-                text: '{{ session('success') }}',
-                showConfirmButton: false,
-                timer: 2000
-            });
-            <?php session()->forget('success'); ?>
         </script>
     @endif
 

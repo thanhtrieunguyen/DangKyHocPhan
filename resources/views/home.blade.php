@@ -3,6 +3,32 @@
 
 @section('content')
 
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Có lỗi xảy ra!',
+                text: '{{ session('error') }}',
+                showConfirmButton: true,
+            });
+            <?php session()->forget('error'); ?>
+        </script>
+    @endif
+
+    <!-- Success Notification -->
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+            <?php session()->forget('success'); ?>
+        </script>
+    @endif
+
     <div class="container min-w-full px-5 mx-auto bg-gray-50">
         @if (Session::has('message'))
             <script>
@@ -96,7 +122,8 @@
                         'image' => 'uploads/h4.png',
                         'link' =>
                             'https://vaa.edu.vn/net-dep-sinh-vien-hoc-vien-hang-khong-viet-nam-khi-ho-tro-hanh-khach-tai-cang-hang-khong-quoc-te-tan-son-nhat-dip-le-quoc-khanh-02-09-2024/',
-                    ],[
+                    ],
+                    [
                         'title' => 'Sinh viên Học viện Hàng không hỗ trợ hành khách tại Tân Sơn Nhất dịp lễ 02/09/2024',
                         'date' => '6 September, 2024',
                         'excerpt' =>
@@ -150,16 +177,18 @@
 
             <div class="mt-8 flex justify-center">
                 @if ($page > 1)
-                    <a href="?page={{ $page - 1 }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800">Trang trước</a>
+                    <a href="?page={{ $page - 1 }}"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800">Trang trước</a>
                 @endif
                 @if ($page * $perPage < $total)
-                    <a href="?page={{ $page + 1 }}" class="px-4 py-2 ml-2 bg-blue-600 text-white rounded-md hover:bg-blue-800">Trang sau</a>
+                    <a href="?page={{ $page + 1 }}"
+                        class="px-4 py-2 ml-2 bg-blue-600 text-white rounded-md hover:bg-blue-800">Trang sau</a>
                 @endif
             </div>
 
-         
-            </div>
+
         </div>
+    </div>
     </div>
 
 @endsection

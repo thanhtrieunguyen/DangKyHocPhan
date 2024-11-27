@@ -16,6 +16,7 @@ class LopController extends Controller
         $query = LopHoc::query()->withCount('sinhviens');
         $khoas = Khoa::all();
         $lops = $query->orderBy('created_at', 'desc')->paginate(10);
+        
         return view('lophoc.index', compact('lops', 'khoas'));
     }
 
@@ -29,7 +30,7 @@ class LopController extends Controller
             'tenlop' => 'required',
             'makhoa' => 'required',
         ]);
-
+        
         $lop = new LopHoc();
         $lop->tenlop = $request->tenlop;
         $lop->makhoa = $request->makhoa;

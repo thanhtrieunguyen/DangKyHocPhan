@@ -56,6 +56,7 @@ class HocKyController extends Controller
             'namhoc' => 'required',
             'ngaybatdau' => 'required|date',
             'ngayketthuc' => 'required|date',
+            'trangthai' => 'required',
         ]);
 
         $hocky = HocKy::where('mahocky', $mahocky)->first();
@@ -64,6 +65,7 @@ class HocKyController extends Controller
         $hocky->namhoc = $request->namhoc;
         $hocky->ngaybatdau = $request->ngaybatdau;
         $hocky->ngayketthuc = $request->ngayketthuc;
+        $hocky->trangthai = $request->trangthai;
 
         $hocky->save();
 

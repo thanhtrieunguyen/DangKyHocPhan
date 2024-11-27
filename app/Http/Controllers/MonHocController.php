@@ -234,4 +234,41 @@ class MonHocController extends Controller
 
         return redirect()->route('monhoc.sinhviens', $mamonhoc)->with('success', 'Xoá sinh viên thành công.');
     }
+
+    public function createStudent($mamonhoc)
+    {
+        $monhoc = MonHoc::where('mamonhoc', $mamonhoc)->firstOrFail();
+        return view('monhoc.create_sinhvien', compact('monhoc'));
+    }
+
+    public function storeStudent(Request $request, $mamonhoc)
+    {
+        $request->validate([
+            'mssv' => 'required|exists:sinhvien,mssv',
+        ]);
+
+        $monhoc = MonHoc::where('mamonhoc', $mamonhoc)->firstOrFail();
+
+        $sinhvien = SinhVien::where('mssv', $request->mssv)->firstOrFail();
+
+
+        // Kiểm tra xem sinh viên đã đăng ký chưa
+        if ($monhoc->dsDangKy()->where('mssv', $sinhvien->mssv)->exists()) {
+            return redirect()->back()->withErrors(['mssv' => 'Sinh viên này đã đăng ký môn học.']);
+        }
+
+        // Thêm sinh viên vào danh sách đăng ký
+        $monhoc->dsDangKy()->create([
+            'mamonhoc' => $mamonhoc,
+            'mssv' => $sinhvien->mssv,
+            'dstenmonhoc' => $monhoc->tenmonhoc,
+            'dsgiangvien' => $monhoc->giangvien,
+            'dssotinchi' => $monhoc->sotinchi,
+        ]);
+
+        $monhoc->dadangky += 1;
+        $monhoc->save();
+
+        return redirect()->route('monhoc.sinhviens', $mamonhoc)->with('success', 'Thêm sinh viên thành công.');
+    }
 }

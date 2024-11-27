@@ -21,6 +21,11 @@ class HocKy extends Model
         'trangthai',
     ];
 
+    protected $casts = [
+        'mahocky' => 'string', // Đảm bảo đây là chuỗi
+    ];
+
+
     public function hocky_sinhvien()
     {
         return $this->hasMany(HocKy_SinhVien::class, 'mahocky', 'mahocky');
@@ -30,7 +35,4 @@ class HocKy extends Model
     {
         return $this->hasMany(MonHoc::class, 'mahocky', 'mahocky');
     }
-
-
-    
 }
