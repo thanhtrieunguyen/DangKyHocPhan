@@ -56,6 +56,9 @@
                     </tr>
                 </thead>
                 <tbody class="bg-gray-50">
+                    {{-- @php
+                        dd($lops);
+                    @endphp --}}
                     @foreach ($lops as $index => $lop)
                         <tr class="border-b border-gray-200 hover:bg-yellow-100 transition-all duration-200">
                             <td class="py-2 px-4">{{ $index + 1 }}</td>

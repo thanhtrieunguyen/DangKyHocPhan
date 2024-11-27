@@ -40,6 +40,7 @@
 
 
     <div class="container mx-auto py-10">
+        
         <div class="bg-white shadow-xl rounded-lg text-center p-8">
             <img src="https://vaa.edu.vn/wp-content/uploads/2024/05/vaa.svg" class="rounded-full mx-auto mb-5" height="150px"
                 width="150px" alt="Profile Picture">

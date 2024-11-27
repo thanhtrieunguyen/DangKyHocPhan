@@ -127,4 +127,20 @@ class SinhVienController extends Controller
         $sinhvien->delete();
         return redirect()->route('sinhvien.index')->with('success', 'Xóa sinh viên thành công');
     }
+
+    public function getStudentInfo($mssv)
+    {
+        $sinhvien = SinhVien::where('mssv', $mssv)->first();
+
+        if (!$sinhvien) {
+            return response()->json(['message' => 'Không tìm thấy sinh viên.'], 404);
+        }
+
+        return response()->json([
+            'mssv' => $sinhvien->mssv,
+            'hoten' => $sinhvien->hoten,
+            'ngaysinh' => $sinhvien->ngaysinh,
+            'lop' => $sinhvien->lop,
+        ]);
+    }
 }

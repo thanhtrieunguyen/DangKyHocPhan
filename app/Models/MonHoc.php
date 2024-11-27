@@ -22,6 +22,7 @@ class MonHoc extends Model
         'soluongsinhvien',
         'dadangky',
         'makhoa',
+        'mahocky',
     ];
 
     // Liên kết với bảng Khoa
@@ -43,6 +44,6 @@ class MonHoc extends Model
     }
     public function hocky()
     {
-        return $this->belongsTo(HocKy::class, 'makhoa', 'makhoa');
+        return $this->belongsTo(HocKy::class, 'mahocky', 'mahocky');
     }
 }

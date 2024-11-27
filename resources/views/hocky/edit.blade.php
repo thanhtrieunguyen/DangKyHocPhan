@@ -78,6 +78,18 @@
                                     id="ngayketthuc" name="ngayketthuc" value="{{ $hocky->ngayketthuc }}">
                             </div>
 
+                            <div class="mb-4">
+                                <label for="trangthai" class="block text-gray-700">Trạng thái:</label>
+                                <select name="trangthai" id="trangthai"
+                                    class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="0" {{ old('trangthai', $hocky->trangthai) == 0 ? 'selected' : '' }}>
+                                        Đã đóng</option>
+                                    <option value="1"
+                                        {{ old('trangthai', $hocky->trangthai) == 1 ? 'selected' : '' }}>Đang
+                                        mở</option>
+                                </select>
+                            </div>
+
                             <button type="submit" class="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded">Cập
                                 Nhật</button>
                         </form>

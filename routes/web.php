@@ -92,3 +92,7 @@ Route::post('quanly-hocky', [HocKyController::class, 'store'])->name('hocky.stor
 Route::get('quanly-hocky/{mahocky}/edit', [HocKyController::class, 'edit'])->name('hocky.edit');
 Route::put('quanly-hocky/{mahocky}', [HocKyController::class, 'update'])->name('hocky.update');
 Route::delete('quanly-hocky/{mahocky}', [HocKyController::class, 'destroy'])->name('hocky.destroy');
+
+Route::get('/api/sinhvien/{mssv}', [SinhVienController::class, 'getStudentInfo']);
+Route::get('/monhoc/{mamonhoc}/create-student', [MonHocController::class, 'createStudent'])->name('monhoc.createStudent');
+Route::post('/monhoc/{mamonhoc}/store-student', [MonHocController::class, 'storeStudent'])->name('monhoc.storeStudent');

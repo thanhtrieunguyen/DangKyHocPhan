@@ -12,8 +12,10 @@
             @endif
 
             <div class="bg-white shadow-lg rounded-lg">
-                <div class="bg-blue-900 text-white text-center py-3 rounded-t-lg">
-                    <h4 class="font-bold">Thêm Sinh Viên Mới</h4>
+                <div class="bg-blue-900 text-white rounded-t-lg p-4 flex justify-between items-center">
+                    <h2 class="font-semibold text-lg">Thêm Sinh Viên Mới</h4>
+                    <a class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-all duration-200" href="{{ route('sinhvien.index') }}">Trở về danh sách</a>
+
                 </div>
                 <div class="px-8 py-6">
                     <form action="{{ route('sinhvien.store') }}" method="post">

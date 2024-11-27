@@ -3,10 +3,34 @@
 @section('title', 'Danh sách sinh viên')
 
 @section('content')
+@if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        </script>
+    @endif
 
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Có lỗi xảy ra!',
+                text: '{{ session('error') }}',
+                showConfirmButton: true,
+            });
+        </script>
+    @endif
+    
 <div class="container mx-auto p-4">
     <h2 class="text-2xl font-semibold">Danh Sách Sinh Viên Đăng Ký Môn: {{ $monhoc->tenmonhoc }}</h2>
-    
+    <a href="{{ route('monhoc.createStudent', $monhoc->mamonhoc) }}"
+                class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md shadow-md">Thêm Sinh
+                Viên</a>
     <table class="table table-bordered mt-4">
         <thead>
             <tr>

@@ -44,6 +44,7 @@
                     @foreach ($khoas as $khoa)
                         <option value="{{ $khoa->makhoa }}" {{ request('makhoa') == $khoa->makhoa ? 'selected' : '' }}>
                             {{ $khoa->tenkhoa }}
+
                         </option>
                     @endforeach
                 </select>
